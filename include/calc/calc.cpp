@@ -1,46 +1,56 @@
 #include "calc.h"
 
-double Calc::Calculate(std::string& post_str, std::vector<std::pair<char, double>>& operands)
+double Calc::Calculate(std::vector<Term>& post_str, std::vector<std::pair<std::string, double>>& operands)
 {
 	Stack<std::vector, double> s1(std::vector<double> {});
 	double left, right = 0;
 	int i = 0;
-	for (char ch : post_str)
+	for (Term t : post_str)
 	{
-		switch (ch)
+		
+		switch (t.get_type())
 		{
-		case '+':
-			right = s1.top();
-			s1.pop();
-			left = s1.top();
-			s1.pop();
-			s1.push(left + right);
-			break;
-		case '-':
-			right = s1.top();
-			s1.pop();
-			left = s1.top();
-			s1.pop();
-			s1.push(left - right);
-			break;
-		case '*':
-			right = s1.top();
-			s1.pop();
-			left = s1.top();
-			s1.pop();
-			s1.push(left * right);
-			break;
-		case '/':
-			right = s1.top();
-			s1.pop();
-			left = s1.top();
-			s1.pop();
-			s1.push(left / right);//проверка на ноль?
-			break;
-		default:
+		case Term::Type::NUMBER:
 			s1.push(operands[i].second);
 			i++;
 			break;
+		case Term::Type::OPERATOR:
+			if (t.get_value() == "+")
+			{
+				right = s1.top();
+				s1.pop();
+				left = s1.top();
+				s1.pop();
+				s1.push(left + right);
+				break;
+			}
+			if (t.get_value() == "-")
+			{
+				right = s1.top();
+				s1.pop();
+				left = s1.top();
+				s1.pop();
+				s1.push(left - right);
+				break;
+			}
+			if (t.get_value() == "*")
+			{
+				right = s1.top();
+				s1.pop();
+				left = s1.top();
+				s1.pop();
+				s1.push(left * right);
+				break;
+			}
+			if (t.get_value() == "/")
+			{
+				right = s1.top();
+				s1.pop();
+				left = s1.top();
+				s1.pop();
+				s1.push(left / right);//проверка на ноль?
+				break;
+			}	
 		}
 	}
 	return s1.top();
