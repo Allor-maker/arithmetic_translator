@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "stack.h"
+#include "parser.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -9,5 +10,5 @@ class Converter
 {
 	
 public:
-	static std::string conv(std::vector<char> inp, std::vector<std::pair<char, double>>& operands);
+	static std::vector<Term> conv(std::vector<Term> inp, std::vector<std::pair<std::string, double>>& operands,std::map<std::string,double>& values);
 };

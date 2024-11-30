@@ -1,58 +1,74 @@
 #include "converter.h"
 
-std::string Converter::conv(std::vector<char> inp, std::vector<std::pair<char, double>>& operands)
+std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<std::pair<std::string, double>>& operands,std::map<std::string,double>& values)
 {
-	std::map<char, int> prio = { {'+',1}, {'-',1},{'*',2},{'/',2} };
-	Stack<std::vector, char> s1(std::vector<char> {});
-	std::string post_str;
-	char stack_item;
-	for (char ch : inp)
+	std::map<std::string, int> prio = { {"(",0}, {"+",1}, {"-",1},{"*",2},{"/",2}};
+
+	Stack<std::vector, Term> s1(std::vector<Term> {});
+	std::vector<Term> post_str;
+	bool fl = 0;
+	for (Term t : inp)
 	{
-		switch (ch)
+		switch (t.get_type())
 		{
-		case '(':
-			s1.push(ch);
+		case Term::Type::NUMBER:
+			operands.push_back({ t.get_value(),std::stod(t.get_value()) });
+			post_str.push_back(t);
 			break;
-		case ')':
-			stack_item = s1.top();
-			s1.pop();
-			while (stack_item != '(')
+		case Term::Type::OPEN_BRACK:
+			s1.push(t);
+			break;
+		case Term::Type::CLOSE_BRACK:
+			
+			while (s1.top().get_value() != "(")
 			{
-				post_str += stack_item;
-				stack_item = s1.top();
+				post_str.push_back(s1.top());
 				s1.pop();
 			}
+			s1.pop();
 			break;
-		case '+': case '-': case '*': case '/':
+		case Term::Type::OPERATOR:
+			if (s1.empty())
+			{
+				s1.push(t);
+				break;
+			}
 			while (!s1.empty())
 			{
-				stack_item = s1.top();
-				s1.pop();
-				if (prio[ch] <= prio[stack_item])
+				if (prio[t.get_value()] <= prio[s1.top().get_value()])
 				{
-					post_str += stack_item;
+					post_str.push_back(s1.top());
+					s1.pop();
 				}
-				else
-				{
-					s1.push(stack_item);
-					break;
-				}
+				s1.push(t);
+				break;
 			}
-			s1.push(ch);
 			break;
-		default:
-			operands.push_back({ ch,ch - '0' });
-			post_str += ch;
-			break;
+		case Term::Type::VALUE:
+			if (values.count(t.get_value()) != 0)
+			{
+				operands.push_back({ t.get_value(),values[t.get_value()]});
+				post_str.push_back(Term(values[t.get_value()]));
+				break;
+			}
+			else
+			{
+				fl = 1;
+				std::cout << "Value " << t.get_value() << " is not existing" << std::endl;
+				post_str.clear();
+				return post_str;
+			}
+		
+			
+
 		}
 
 
 	}
 	while (!s1.empty())
 	{
-		stack_item = s1.top();
+		post_str.push_back(s1.top());
 		s1.pop();
-		post_str += stack_item;
 	}
 	return post_str;
 }
