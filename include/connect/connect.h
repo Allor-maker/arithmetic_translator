@@ -5,7 +5,7 @@
 #include <map>
 #include "converter.h"
 #include "calc.h"
-
+#include "interface.h"
 class Connect
 {
 public:
