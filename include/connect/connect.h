@@ -10,4 +10,5 @@ class Connect
 {
 public:
 	static void connection();
+	static void handler(std::map<std::string, double>& values, std::vector<Term>& terms);
 };
