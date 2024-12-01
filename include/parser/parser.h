@@ -30,9 +30,9 @@ public:
 	Term(std::string str);
 	
 	static double to_value(std::string str);
-	std::string get_value();
-	Type get_type();
-	
+	std::string get_value() const;
+	Type get_type() const;
+	bool operator==(const Term& other) const;
 
 };
 class Parser

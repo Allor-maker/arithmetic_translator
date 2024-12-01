@@ -36,13 +36,17 @@ double Term::to_value(std::string str)
 {
 	return std::stod(str);
 }
-std::string Term::get_value()
+std::string Term::get_value() const
 {
 	return value_str;
 }
-Term::Type Term::get_type()
+Term::Type Term::get_type() const
 {
 	return type;
+}
+bool Term::operator==(const Term& other) const
+{
+	return (get_type() == other.get_type() && get_value() == other.get_value());
 }
 std::vector<Term> Parser::term_analis(std::string str)
 {
