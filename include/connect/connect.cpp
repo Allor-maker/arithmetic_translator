@@ -1,7 +1,7 @@
 #include "connect.h"
 void Connect::handler(std::map<std::string, double>& values, std::vector<Term>& terms)
 {
-	std::vector<std::pair<std::string, double>> operands;
+	std::vector<double> operands;
 	std::vector<Term> post_str;
 	double ans;
 
