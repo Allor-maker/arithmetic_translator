@@ -12,7 +12,7 @@ protected:
         Term a(ch);
         output.push_back(a);
     }
-    void add_operand(const std::string& name, double value)
+    void add_operand(double value)
     {
         Term a(value);
         output.push_back(a);
@@ -33,9 +33,9 @@ TEST_F(test_term_analis, can_pars_simple_addition)
 {
 	input = "1+2";
 	
-    add_operand("", 1);
+    add_operand(1);
     add_operator('+');
-    add_operand("", 2);
+    add_operand(2);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -43,9 +43,9 @@ TEST_F(test_term_analis, can_pars_simple_substraction)
 {
     input = "1-2";
 
-    add_operand("", 1);
+    add_operand(1);
     add_operator('-');
-    add_operand("", 2);
+    add_operand(2);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -53,9 +53,9 @@ TEST_F(test_term_analis, can_pars_simple_multiplication)
 {
     input = "1*27";
 
-    add_operand("", 1);
+    add_operand(1);
     add_operator('*');
-    add_operand("", 27);
+    add_operand(27);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -63,9 +63,9 @@ TEST_F(test_term_analis, can_pars_simple_division)
 {
     input = "18/2";
 
-    add_operand("", 18);
+    add_operand(18);
     add_operator('/');
-    add_operand("", 2);
+    add_operand(2);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -74,12 +74,12 @@ TEST_F(test_term_analis, can_pars_expression_with_brackets)
     input = "(1+2)*3";
 
     add_operator('(');
-    add_operand("", 1);
+    add_operand(1);
     add_operator('+');
-    add_operand("", 2);
+    add_operand(2);
     add_operator(')');
     add_operator('*');
-    add_operand("", 3);
+    add_operand(3);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -87,9 +87,9 @@ TEST_F(test_term_analis, can_pars_simple_expression_with_variable)
 {
     input = "1+2+a";
 
-    add_operand("", 1);
+    add_operand(1);
     add_operator('+');
-    add_operand("", 2);
+    add_operand(2);
     add_operator('+');
     add_operand("a");
 
@@ -102,7 +102,7 @@ TEST_F(test_term_analis, can_pars_expression_with_brackets_and_multi_character_v
     add_operand("MyVar");
     add_operator('*');
     add_operator('(');
-    add_operand("", 1);
+    add_operand(1);
     add_operator('+');
     add_operand("Sec");
     add_operator(')');
@@ -115,9 +115,9 @@ TEST_F(test_term_analis, can_pars_expression_with_the_equal_sign)
 
     add_operand("a");
     add_operator('=');
-    add_operand("", 3);
+    add_operand(3);
     add_operator('+');
-    add_operand("", 4);
+    add_operand(4);
 
     EXPECT_EQ(output, Parser::term_analis(input));
 }
@@ -140,9 +140,9 @@ TEST_F(test_term_analis, can_pars_expression_with_the_equal_sign_and_brackets)
     add_operand("a");
     add_operator('=');
     add_operator('(');
-    add_operand("",3);
+    add_operand(3);
     add_operator('+');
-    add_operand("", 1);
+    add_operand(1);
     add_operator(')');
     add_operator('*');
     add_operand("b");
