@@ -6,14 +6,13 @@ class test_connection : public::testing::Test
 protected:
     std::vector<Term> terms;
     std::map<std::string, double> values;
-    std::vector<std::pair<std::string, double>> operands;
 
     void add_operator(const char& ch)
     {
         Term a(ch);
         terms.push_back(a);
     }
-    void add_operand(const std::string& name, double value)
+    void add_operand(double value)
     {
         Term a(value);
         terms.push_back(a);
@@ -34,7 +33,6 @@ protected:
     {
         terms.clear();
         values.clear();
-        operands.clear();
     }
 };
 
@@ -42,9 +40,9 @@ TEST_F(test_connection, can_assign_expression_to_variable)
 {
     add_operand("a");
     add_operator('=');
-    add_operand("",2);
+    add_operand(2);
     add_operator('+');
-    add_operand("",7);
+    add_operand(7);
 
     Connect::handler(values, terms);
     EXPECT_EQ(9,values["a"]);
@@ -55,9 +53,9 @@ TEST_F(test_connection, can_assign_expression_to_already_existing_variable)
 
     add_operand("a");
     add_operator('=');
-    add_operand("", 2);
+    add_operand(2);
     add_operator('+');
-    add_operand("", 7);
+    add_operand(7);
 
     Connect::handler(values, terms);
     EXPECT_EQ(9, values["a"]);
@@ -83,7 +81,7 @@ TEST_F(test_connection, can_assign_expression_with_variable_to_itself)
     add_operator('=');
     add_operand("a");
     add_operator('+');
-    add_operand("", 7);
+    add_operand(7);
 
     Connect::handler(values, terms);
     EXPECT_EQ(17, values["a"]);
@@ -92,7 +90,7 @@ TEST_F(test_connection, doesnt_throw_when_expression_with_not_existing_variable)
 {
     add_operand("a");
     add_operator('+');
-    add_operand("", 7);
+    add_operand(7);
 
     ASSERT_NO_THROW(Connect::handler(values, terms));
 }
