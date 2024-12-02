@@ -13,13 +13,17 @@ public:
 	enum class Type
 	{
 		NUMBER,
-		CONSTANT,
 		OPERATOR,
 		OPEN_BRACK,
 		CLOSE_BRACK,
 		VALUE,
-		FUNK,
 		EQ
+	};
+	class CONSTANTS
+	{
+	public:
+		static double pi;
+		static double e;
 	};
 private:
 	Type type;

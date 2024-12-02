@@ -1,5 +1,6 @@
 #include "parser.h"
-
+double Term::CONSTANTS::pi = 3.14159265359;
+double Term::CONSTANTS::e = 2.71828182846;
 std::vector<char> Parser::pars(std::string str)
 {
 	std::vector<char> v{};
@@ -31,7 +32,24 @@ Term::Term(char ch)
 		value_str.push_back(ch);
 	}
 }
-Term::Term(std::string str):type(Type::VALUE),value_str(str){}
+Term::Term(std::string str)
+{
+	if (str == "pi" || str == "PI" || str == "Pi")
+	{
+		type = Type::NUMBER;
+		value_str = std::to_string(Term::CONSTANTS::pi);
+	}
+	else if (str == "e")
+	{
+		type = Type::NUMBER;
+		value_str = std::to_string(Term::CONSTANTS::e);
+	}
+	else
+	{
+		type = Type::VALUE;
+		value_str = str;
+	}
+}
 double Term::to_value(std::string str)
 {
 	return std::stod(str);
