@@ -1,6 +1,6 @@
 #include "calc.h"
 
-double Calc::Calculate(std::vector<Term>& post_str, std::vector<std::pair<std::string, double>>& operands)
+double Calc::Calculate(std::vector<Term>& post_str, std::vector<double>& operands)
 {
 	Stack<std::vector, double> s1(std::vector<double> {});
 	double left, right = 0;
@@ -11,7 +11,7 @@ double Calc::Calculate(std::vector<Term>& post_str, std::vector<std::pair<std::s
 		switch (t.get_type())
 		{
 		case Term::Type::NUMBER:
-			s1.push(operands[i].second);
+			s1.push(operands[i]);
 			i++;
 			break;
 		case Term::Type::OPERATOR:

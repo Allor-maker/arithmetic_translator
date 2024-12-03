@@ -1,6 +1,6 @@
 #include "converter.h"
 
-std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<std::pair<std::string, double>>& operands,std::map<std::string,double>& values)
+std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<double>& operands,std::map<std::string,double>& values)
 {
 	std::map<std::string, int> prio = { {"(",0}, {"+",1}, {"-",1},{"*",2},{"/",2}};
 
@@ -12,7 +12,7 @@ std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<std::pair<s
 		switch (t.get_type())
 		{
 		case Term::Type::NUMBER:
-			operands.push_back({ t.get_value(),std::stod(t.get_value()) });
+			operands.push_back(std::stod(t.get_value()));
 			post_str.push_back(t);
 			break;
 		case Term::Type::OPEN_BRACK:
@@ -47,7 +47,7 @@ std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<std::pair<s
 		case Term::Type::VALUE:
 			if (values.count(t.get_value()) != 0)
 			{
-				operands.push_back({ t.get_value(),values[t.get_value()]});
+				operands.push_back(values[t.get_value()]);
 				post_str.push_back(Term(values[t.get_value()]));
 				break;
 			}
@@ -58,12 +58,7 @@ std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<std::pair<s
 				post_str.clear();
 				return post_str;
 			}
-		
-			
-
 		}
-
-
 	}
 	while (!s1.empty())
 	{
