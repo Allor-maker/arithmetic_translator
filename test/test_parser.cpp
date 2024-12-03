@@ -150,3 +150,23 @@ TEST_F(test_term_analis, can_pars_expression_with_the_equal_sign_and_brackets)
     EXPECT_EQ(output, Parser::term_analis(input));
 }
 
+TEST_F(test_term_analis, can_pars_constant_pi)
+{
+    input = "pi+PI+Pi";
+
+    add_operand(3.14159265359);
+    add_operator('+');
+    add_operand(3.14159265359);
+    add_operator('+');
+    add_operand(3.14159265359);
+
+    EXPECT_EQ(output, Parser::term_analis(input));
+}
+TEST_F(test_term_analis, can_pars_constant_e)
+{
+    input = "e";
+
+    add_operand(2.71828182846);
+
+    EXPECT_EQ(output, Parser::term_analis(input));
+}
