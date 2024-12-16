@@ -1,4 +1,4 @@
-#include "calc.h"
+	#include "calc.h"
 
 double Calc::Calculate(std::vector<Term>& post_str, std::vector<double>& operands)
 {
