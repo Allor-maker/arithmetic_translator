@@ -12,12 +12,12 @@ void Connect::handler(std::map<std::string, double>& values, std::vector<Term>& 
 		terms.erase(terms.begin(), terms.begin() + 2);
 		post_str = Converter::conv(terms, operands, values);
 
-		if (values.count(value) != 0 && post_str.empty() != true)
+		if (values.count(value) != 0 && !post_str.empty()	)
 		{
 			values[value] = Calc::Calculate(post_str, operands);
 			std::cout << "Click ESC to close or ENTER to continue";
 		}
-		if (values.count(value) == 0)
+		if (values.count(value) == 0 && !post_str.empty())
 		{
 			std::pair < std::string, double> a;
 			a.first = value;
