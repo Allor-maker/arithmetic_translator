@@ -47,6 +47,6 @@ public:
 	static std::vector<char> pars(std::string str);
 	static std::string synt_analis();
 	static std::vector<Term> term_analis(std::string str);
-	static void synt_analis_fsm(int& parenthesis_counter, std::string& input, Stack<std::vector, int>& S, int status);
+	static char synt_analis_fsm(int& parenthesis_counter, std::string& input, Stack<std::vector, int>& S, int status);
 	static void value_analis_fsm(char ch,std::string input, Stack<std::vector, int> S);
 };

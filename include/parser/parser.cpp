@@ -354,7 +354,7 @@ int Parser::add_ch(std::string& input, Stack<std::vector, int>& S,int st,char& c
 	input.push_back(ch);
 	return st;
 }
-void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<std::vector, int>& S,int status)	
+char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<std::vector, int>& S,int status)	
 {
 	char ch = _getch();
 	S.push(0);
@@ -788,6 +788,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		}
 		ch = _getch();
 	}
+	return ch;
 }
 std::string Parser::synt_analis()
 {
@@ -799,8 +800,11 @@ std::string Parser::synt_analis()
 		input.clear();
 		Stack<std::vector, int> S(std::vector<int> {});
 		int status = 0;
-		synt_analis_fsm(parenthesis_counter, input, S, status);
-		
+		char ch = synt_analis_fsm(parenthesis_counter, input, S, status);
+		if (ch == 3)
+		{
+			input.clear();
+		}
 		std::cout << std::endl;
 		if (parenthesis_counter != 0)
 		{
