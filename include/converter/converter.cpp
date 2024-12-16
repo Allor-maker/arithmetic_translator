@@ -28,21 +28,19 @@ std::vector<Term> Converter::conv(std::vector<Term> inp, std::vector<double>& op
 			s1.pop();
 			break;
 		case Term::Type::OPERATOR:
-			if (s1.empty())
-			{
-				s1.push(t);
-				break;
-			}
 			while (!s1.empty())
 			{
-				if (prio[t.get_value()] <= prio[s1.top().get_value()])
+				if (prio[s1.top().get_value()] >= prio[t.get_value()])
 				{
 					post_str.push_back(s1.top());
 					s1.pop();
 				}
-				s1.push(t);
-				break;
+				else
+				{
+					break;
+				}
 			}
+			s1.push(t);
 			break;
 		case Term::Type::VALUE:
 			if (values.count(t.get_value()) != 0)
