@@ -417,13 +417,9 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			}
 			if (ch >= 48 && ch <= 57)
 			{
-				status = 1;
-				input.push_back(ch);
-				Interface::print_ch(ch);
+				status = add_ch(input, S, 1, ch);
 				break;
 			}
-		
-			
 			else
 			{
 				Interface::print_red_ch(ch);
@@ -499,9 +495,7 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			}
 			if (ch >= 48 && ch <= 57)
 			{
-				status = 3;
-				input.push_back(ch);
-				Interface::print_ch(ch);
+				status = add_ch(input, S, 3, ch);
 				break;
 			}
 			
@@ -514,7 +508,7 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 4:
 			if (ch == 41)
 			{
-				status = 4;
+				status = add_ch(input,S,4,ch);
 				parenthesis_counter--;
 				if (parenthesis_counter < 0)
 				{
@@ -523,8 +517,6 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 					status = 5;
 					break;
 				}
-				Interface::print_ch(ch);
-				input.push_back(ch);
 				break;
 			}
 			if (ch == 13)
