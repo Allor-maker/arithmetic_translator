@@ -581,6 +581,11 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 				status = add_ch(input, S, 2, ch);
 				break;
 			}
+			if (ch == 13)
+			{
+				status = 13;
+				break;
+			}
 			if (ch == 8)
 			{
 				del_ch(input, S, status, parenthesis_counter);
@@ -669,6 +674,11 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			if (ch >= 48 && ch <= 57)
 			{
 				status = add_ch(input,S,1,ch);
+				break;
+			}
+			if (ch == 13)
+			{
+				status = 13;
 				break;
 			}
 			if (ch == 8)
