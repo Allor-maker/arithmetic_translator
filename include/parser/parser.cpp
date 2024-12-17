@@ -358,7 +358,7 @@ char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 {
 	char ch = _getch();
 	S.push(0);
-	while ((ch != 13 || parenthesis_counter != 0 || status == 2 ||status==11 || status ==13 || status ==5 || status == 4) && ch != 3)
+	while ((ch != 13 || parenthesis_counter != 0 || status == 2 ||status==11 || status ==13 || status ==5 ) && ch != 3)
 	{
 		switch (status)
 		{
