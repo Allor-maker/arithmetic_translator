@@ -10,5 +10,5 @@ class Converter
 {
 	
 public:
-	static std::vector<Term> conv(std::vector<Term> inp, std::vector<std::pair<std::string, double>>& operands,std::map<std::string,double>& values);
+	static std::vector<Term> conv(std::vector<Term> inp, std::vector<double>& operands,std::map<std::string,double>& values);
 };

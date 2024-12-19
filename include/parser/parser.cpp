@@ -1,5 +1,6 @@
 #include "parser.h"
-
+double Term::CONSTANTS::pi = 3.14159265359;
+double Term::CONSTANTS::e = 2.71828182846;
 std::vector<char> Parser::pars(std::string str)
 {
 	std::vector<char> v{};
@@ -31,7 +32,24 @@ Term::Term(char ch)
 		value_str.push_back(ch);
 	}
 }
-Term::Term(std::string str):type(Type::VALUE),value_str(str){}
+Term::Term(std::string str)
+{
+	if (str == "pi" || str == "PI" || str == "Pi")
+	{
+		type = Type::NUMBER;
+		value_str = std::to_string(Term::CONSTANTS::pi);
+	}
+	else if (str == "e")
+	{
+		type = Type::NUMBER;
+		value_str = std::to_string(Term::CONSTANTS::e);
+	}
+	else
+	{
+		type = Type::VALUE;
+		value_str = str;
+	}
+}
 double Term::to_value(std::string str)
 {
 	return std::stod(str);
@@ -336,11 +354,11 @@ int Parser::add_ch(std::string& input, Stack<std::vector, int>& S,int st,char& c
 	input.push_back(ch);
 	return st;
 }
-void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<std::vector, int>& S,int status)	
+char Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<std::vector, int>& S,int status)	
 {
 	char ch = _getch();
 	S.push(0);
-	while (ch != 13 || parenthesis_counter != 0 || status == 2 || status == 10 ||status==11 || status ==13 || status ==5 )
+	while ((ch != 13 || parenthesis_counter != 0 || status == 2 ||status==11 || status ==13 || status ==5 ) && ch != 3)
 	{
 		switch (status)
 		{
@@ -399,13 +417,9 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			}
 			if (ch >= 48 && ch <= 57)
 			{
-				status = 1;
-				input.push_back(ch);
-				Interface::print_ch(ch);
+				status = add_ch(input, S, 1, ch);
 				break;
 			}
-		
-			
 			else
 			{
 				Interface::print_red_ch(ch);
@@ -481,9 +495,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			}
 			if (ch >= 48 && ch <= 57)
 			{
-				status = 3;
-				input.push_back(ch);
-				Interface::print_ch(ch);
+				status = add_ch(input, S, 3, ch);
 				break;
 			}
 			
@@ -496,7 +508,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 4:
 			if (ch == 41)
 			{
-				status = 4;
+				status = add_ch(input,S,4,ch);
 				parenthesis_counter--;
 				if (parenthesis_counter < 0)
 				{
@@ -505,8 +517,11 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 					status = 5;
 					break;
 				}
-				Interface::print_ch(ch);
-				input.push_back(ch);
+				break;
+			}
+			if (ch == 13)
+			{
+				status = 13;
 				break;
 			}
 			if (ch == 43 || ch == 42 || ch == 45 || ch == 47)
@@ -538,9 +553,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 6:
 			if (ch >= 48 && ch <= 57)
 			{
-				status = 6;
-				Interface::print_ch(ch);
-				input.push_back(ch);
+				status = add_ch(input, S, 6, ch);
 				break;
 			}
 			if (ch == 41)
@@ -560,6 +573,11 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 				status = add_ch(input, S, 2, ch);
 				break;
 			}
+			if (ch == 13)
+			{
+				status = 13;
+				break;
+			}
 			if (ch == 8)
 			{
 				del_ch(input, S, status, parenthesis_counter);
@@ -575,10 +593,8 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 7:
 			if (ch == 40)
 			{
-				input.push_back(ch);
-				status = 7;
+				status = add_ch(input, S, 7, ch);
 				parenthesis_counter++;
-				Interface::print_ch(ch);
 				break;
 			}
 			if (ch >= 48 && ch <= 57)
@@ -596,7 +612,11 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 				del_ch(input, S, status, parenthesis_counter);
 				break;
 			}
-			
+			if (ch == 13)
+			{
+				status = 13;
+				break;
+			}
 			else
 			{
 				Interface::print_red_ch(ch);
@@ -606,9 +626,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 8:
 			if (ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90)
 			{
-				status = 8;
-				input.push_back(ch);
-				Interface::print_ch(ch);
+				status = add_ch(input,S,8,ch);
 				break;
 			}
 			if (ch == 61)
@@ -623,9 +641,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 			}
 			if (ch == 8)
 			{
-				status = S.top();
-				input.pop_back();
-				Interface::delete_ch();
+				del_ch(input, S, status, parenthesis_counter);
 				break;
 			}
 			
@@ -638,8 +654,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 9:
 			if (ch == 40)
 			{
-				Interface::print_ch(ch);
-				input.push_back(ch);
+				status = add_ch(input, S, 9, ch);
 				parenthesis_counter++;
 				break;
 			}
@@ -653,12 +668,16 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 				status = add_ch(input,S,1,ch);
 				break;
 			}
+			if (ch == 13)
+			{
+				status = 13;
+				break;
+			}
 			if (ch == 8)
 			{
 				del_ch(input, S, status, parenthesis_counter);
 				break;
 			}
-			
 			else
 			{
 				Interface::print_red_ch(ch);
@@ -668,9 +687,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 10:
 			if (ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90)
 			{
-				status = 10;
-				Interface::print_ch(ch);
-				input.push_back(ch);
+				status = add_ch(input, S, 10, ch);
 				break;
 			}
 			if (ch == 43 || ch == 42 || ch == 45 || ch == 47)
@@ -730,9 +747,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		case 12:
 			if (ch >= 97 && ch <= 122 || ch >= 65 && ch <= 90)
 			{
-				status = 12;
-				Interface::print_ch(ch);
-				input.push_back(ch);
+				status = add_ch(input, S, 12, ch);
 				break;
 			}
 			if (ch == 41)
@@ -780,6 +795,7 @@ void Parser::synt_analis_fsm(int& parenthesis_counter,std::string& input, Stack<
 		}
 		ch = _getch();
 	}
+	return ch;
 }
 std::string Parser::synt_analis()
 {
@@ -791,8 +807,11 @@ std::string Parser::synt_analis()
 		input.clear();
 		Stack<std::vector, int> S(std::vector<int> {});
 		int status = 0;
-		synt_analis_fsm(parenthesis_counter, input, S, status);
-		
+		char ch = synt_analis_fsm(parenthesis_counter, input, S, status);
+		if (ch == 3)
+		{
+			input.clear();
+		}
 		std::cout << std::endl;
 		if (parenthesis_counter != 0)
 		{

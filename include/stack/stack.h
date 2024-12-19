@@ -17,7 +17,10 @@ public:
 	}
 	void pop()
 	{
-		data.pop_back();
+		if (data.size() != 0)
+			data.pop_back();
+		else
+			throw 0;
 	}
 	T& top()
 	{
